@@ -57,6 +57,13 @@ public class CameraMovement : MonoBehaviour
             verticalInput = 1f;
         }
 
+        if (Input.GetMouseButton(1))
+        {
+            horizontalInput = -Input.GetAxis("Mouse X");
+            verticalInput = -Input.GetAxis("Mouse Y");
+        }
+
+
         transform.Translate(new Vector3(horizontalInput, verticalInput, 0) * movementSpeed * Time.deltaTime);
 
 
