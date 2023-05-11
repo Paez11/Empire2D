@@ -10,6 +10,8 @@ public class CameraMovement : MonoBehaviour
     [SerializeField] private float maxZoom = 10f;
     [SerializeField] private float hardMovementSpeed = 4f;
     //[SerializeField] private float edgeScrollingSpeed = 10f;
+    [SerializeField] private Vector2 minCameraPosition;
+    [SerializeField] private Vector2 maxCameraPosition;
 
     private Camera mainCamera;
     private Vector3 lastMousePosition;
@@ -23,7 +25,9 @@ public class CameraMovement : MonoBehaviour
     // Start is called before the first frame update
     void Start()
     {
-        
+        //Change respect the scale of the map
+        minCameraPosition = new Vector2(-39f, -23f); 
+        maxCameraPosition = new Vector2(39f, 23f);  
     }
 
     // Update is called once per frame
@@ -37,9 +41,12 @@ public class CameraMovement : MonoBehaviour
         // Move the camera using the mouse position relative with the screen
         float mouseX = Input.mousePosition.x;
         float mouseY = Input.mousePosition.y;
+
+        //Edge of the screen
         float screenWidth = Screen.width;
         float screenHeight = Screen.height;
 
+        //camera move at edge of the screen
         if (mouseX < screenWidth * 0.01f)
         {
             horizontalInput = -1f;
@@ -58,20 +65,31 @@ public class CameraMovement : MonoBehaviour
             verticalInput = 1f;
         }
 
+        //Move of the camera
         if (Input.GetMouseButton(1))
         {
             horizontalInput = -hardMovementSpeed*Input.GetAxis("Mouse X");
             verticalInput = -hardMovementSpeed*Input.GetAxis("Mouse Y");
         }
 
+        //position of the camera, controlling the max and min position it can go
 
-        transform.Translate(new Vector3(horizontalInput, verticalInput, 0) * movementSpeed * Time.deltaTime);
+        //transform.Translate(new Vector3(horizontalInput, verticalInput, 0) * movementSpeed * Time.deltaTime);
+        Vector3 desiredTranslation = new Vector3(horizontalInput, verticalInput, 0) * movementSpeed * Time.deltaTime;
+        Vector3 newPosition = transform.position + desiredTranslation;
+        newPosition.x = Mathf.Clamp(newPosition.x, minCameraPosition.x, maxCameraPosition.x);
+        newPosition.y = Mathf.Clamp(newPosition.y, minCameraPosition.y, maxCameraPosition.y);
+        transform.position = newPosition;
 
 
 
         // Zoom the camera using the scroll wheel
         float zoomInput = Input.GetAxis("Mouse ScrollWheel");
         mainCamera.orthographicSize = Mathf.Clamp(mainCamera.orthographicSize - zoomInput * zoomSpeed, minZoom, maxZoom);
+        // Calculate new camera position limits based on zoom level
+        float zoomFactor = mainCamera.orthographicSize / maxZoom;  // Adjust this factor to control the rate of change
+        Vector2 zoomedMinPosition = minCameraPosition * zoomFactor;
+        Vector2 zoomedMaxPosition = maxCameraPosition * zoomFactor;
         
         if(Input.GetKey(KeyCode.LeftShift)){
             movementSpeed = 45f;

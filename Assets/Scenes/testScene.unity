@@ -583,6 +583,8 @@ MonoBehaviour:
   minZoom: 1
   maxZoom: 10
   hardMovementSpeed: 4
+  minCameraPosition: {x: -38, y: -20}
+  maxCameraPosition: {x: 38, y: 20}
 --- !u!1 &670529018
 GameObject:
   m_ObjectHideFlags: 0
