@@ -8,6 +8,7 @@ public class CameraMovement : MonoBehaviour
     [SerializeField] private float zoomSpeed = 5f;
     [SerializeField] private float minZoom = 2f;
     [SerializeField] private float maxZoom = 10f;
+    [SerializeField] private float hardMovementSpeed = 4f;
     //[SerializeField] private float edgeScrollingSpeed = 10f;
 
     private Camera mainCamera;
@@ -59,8 +60,8 @@ public class CameraMovement : MonoBehaviour
 
         if (Input.GetMouseButton(1))
         {
-            horizontalInput = -Input.GetAxis("Mouse X");
-            verticalInput = -Input.GetAxis("Mouse Y");
+            horizontalInput = -hardMovementSpeed*Input.GetAxis("Mouse X");
+            verticalInput = -hardMovementSpeed*Input.GetAxis("Mouse Y");
         }
 
 
