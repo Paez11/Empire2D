@@ -16,6 +16,9 @@ public class CameraMovement : MonoBehaviour
     private Camera mainCamera;
     private Vector3 lastMousePosition;
 
+    
+    public bool isCharacterSelected;
+
     private void Awake()
     {
         mainCamera = GetComponent<Camera>();
@@ -25,9 +28,10 @@ public class CameraMovement : MonoBehaviour
     // Start is called before the first frame update
     void Start()
     {
+        isCharacterSelected = false;
         //Change respect the scale of the map
         minCameraPosition = new Vector2(-39f, -23f); 
-        maxCameraPosition = new Vector2(39f, 23f);  
+        maxCameraPosition = new Vector2(39f, 23f);
     }
 
     // Update is called once per frame
@@ -64,9 +68,9 @@ public class CameraMovement : MonoBehaviour
         {
             verticalInput = 1f;
         }
-
-        //Move of the camera
-        if (Input.GetMouseButton(1))
+        
+        //Move of the camera with right click press
+        if (Input.GetMouseButton(1) && !isCharacterSelected)
         {
             horizontalInput = -hardMovementSpeed*Input.GetAxis("Mouse X");
             verticalInput = -hardMovementSpeed*Input.GetAxis("Mouse Y");

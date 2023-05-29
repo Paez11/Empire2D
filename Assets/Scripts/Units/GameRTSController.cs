@@ -9,9 +9,12 @@ public class GameRTSController : MonoBehaviour
     private Vector3 startPosition;
     private List<UnitRTS> selectedUnitRTSList;
 
+    private CameraMovement cameraMovement;
+
     private void Awake() {
         selectedUnitRTSList = new List<UnitRTS>();
         selectionAreaTransform.gameObject.SetActive(false);
+        cameraMovement = FindObjectOfType<CameraMovement>();
     }
     // Start is called before the first frame update
     void Start()
@@ -69,6 +72,14 @@ public class GameRTSController : MonoBehaviour
                         unitRTS.SetSelectedVisible(true);
                         selectedUnitRTSList.Add(unitRTS);
                     }
+                }
+
+                if(selectedUnitRTSList.Count > 0)
+                {
+                    cameraMovement.isCharacterSelected = true;
+                }else
+                {
+                    cameraMovement.isCharacterSelected = false;
                 }
 
                 Debug.Log(selectedUnitRTSList.Count);

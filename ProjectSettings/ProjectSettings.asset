@@ -12,7 +12,7 @@ PlayerSettings:
   targetDevice: 2
   useOnDemandResources: 0
   accelerometerFrequency: 60
-  companyName: DefaultCompany
+  companyName: V11Games
   productName: Quarrel of civilizations
   defaultCursor: {fileID: 0}
   cursorHotspot: {x: 0, y: 0}
@@ -574,7 +574,8 @@ PlayerSettings:
   webGLThreadsSupport: 0
   webGLDecompressionFallback: 0
   webGLPowerPreference: 2
-  scriptingDefineSymbols: {}
+  scriptingDefineSymbols:
+    Server: Version
   additionalCompilerArguments: {}
   platformArchitecture: {}
   scriptingBackend: {}
