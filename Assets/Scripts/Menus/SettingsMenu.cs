@@ -3,6 +3,7 @@ using System.Collections.Generic;
 using UnityEngine;
 using UnityEngine.Audio;
 using UnityEngine.UI;
+using TMPro;
 
 public class SettingsMenu : MonoBehaviour
 {
@@ -10,13 +11,35 @@ public class SettingsMenu : MonoBehaviour
     [SerializeField] Slider generalSlider;
     [SerializeField] Slider musicSlider;
     [SerializeField] Slider soundSlider;
+    [SerializeField] TMP_Dropdown  resolutionsDropDowns;
 
     public const string MIXER_GENERAL = "MainGeneralVolume";
     public const string MIXER_MUSIC = "MainMusicVolume";
     public const string MIXER_SOUND = "MainSoundVolume";
 
+    Resolution[] resolutions;
+
     public void Awake()
     {
+        resolutions = Screen.resolutions;
+        resolutionsDropDowns.ClearOptions();
+
+        List<string> options = new List<string>();
+
+        int currentResolutionIndex = 0;
+        for (int i = 0; i < resolutions.Length; i++)
+        {
+            string option = resolutions[i].width + " x " + resolutions[i].height;
+            options.Add(option);
+
+            if(resolutions[i].width == Screen.currentResolution.width && resolutions[i].height == Screen.currentResolution.height)
+                currentResolutionIndex = i;
+        }
+        resolutionsDropDowns.AddOptions(options);
+        resolutionsDropDowns.value = currentResolutionIndex;
+        resolutionsDropDowns.RefreshShownValue();
+
+        generalSlider.onValueChanged.AddListener(SetGeneralVolume);
         musicSlider.onValueChanged.AddListener(SetMusicVolume);
         soundSlider.onValueChanged.AddListener(SetSoundVolume);
     }
@@ -49,5 +72,26 @@ public class SettingsMenu : MonoBehaviour
     public void SetSoundVolume (float value)
     {
         audioMixer.SetFloat("MainSoundVolume", Mathf.Log10(value) * 20);
+    }
+
+    public void SetQuality(int qualityIndex)
+    {
+        QualitySettings.SetQualityLevel(qualityIndex);
+    }
+
+    public void SetResolution (int resolutionIndex)
+    {
+        Resolution resolution = resolutions[resolutionIndex];
+        Screen.SetResolution(resolution.width, resolution.height, Screen.fullScreen);
+    }
+
+    public void SetFullScreen (bool isFullscreen)
+    {
+        Screen.fullScreen = isFullscreen;
+    }
+
+    public void SetVsync (bool isVsync)
+    {
+        QualitySettings.vSyncCount = isVsync ? 1 : 0;
     }
 }
