@@ -5,6 +5,8 @@ using UnityEngine;
 public class MovePositionDirect : MonoBehaviour, IMoveVelocity, IMovePosition
 {
     private Vector3 movePosition;
+    private Vector3 previousPosition;
+    private Vector3 currentPosition;
 
     private void Awake() {
         movePosition = transform.position;
@@ -18,9 +20,27 @@ public class MovePositionDirect : MonoBehaviour, IMoveVelocity, IMovePosition
     void Update()
     {
         Vector3 moveDir = (movePosition - transform.position).normalized;
-        if(Vector3.Distance(movePosition, transform.position) < 1f)
-            moveDir = Vector3.zero; //Stop Moving when near and object
+
+        if (Vector3.Distance(movePosition, transform.position) < 1f)
+            moveDir = Vector3.zero; // Stop Moving when near an object
+
         GetComponent<IMoveVelocity>().SetVelocity(moveDir);
+
+        currentPosition = transform.position; // Get the current position
+
+        Vector3 movementDelta = currentPosition - previousPosition; // Calculate the change in position
+
+        // Determine the direction based on the movement delta
+        if (movementDelta.x < 0.0f)
+        {
+            transform.localScale = new Vector3(1.0f, 1.0f, 1.0f); 
+        }
+        else if (movementDelta.x > 0.0f)
+        {
+            transform.localScale = new Vector3(-1.0f, 1.0f, 1.0f); 
+        }
+
+        previousPosition = currentPosition; // Update the previous position for the next frame
     }
 
     public void SetVelocity(Vector3 velocityVector)
