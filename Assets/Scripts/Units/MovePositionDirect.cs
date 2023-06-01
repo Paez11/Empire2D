@@ -4,7 +4,7 @@ using UnityEngine;
 
 public class MovePositionDirect : MonoBehaviour, IMoveVelocity, IMovePosition
 {
-    private Vector3 movePosition;
+    public Vector3 movePosition;
     private Vector3 previousPosition;
     private Vector3 currentPosition;
 

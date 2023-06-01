@@ -16,6 +16,8 @@ GameObject:
   - component: {fileID: 7327926113073478609}
   - component: {fileID: 5965926001775999162}
   - component: {fileID: 1320421354998377794}
+  - component: {fileID: 6368326703390974008}
+  - component: {fileID: -335436304149331954}
   m_Layer: 0
   m_Name: RomanPeasant
   m_TagString: Untagged
@@ -196,6 +198,36 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: 494b66f96d0b1024ea046e50b24e6716, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
+  movePosition: {x: 0, y: 0, z: 0}
+--- !u!114 &6368326703390974008
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 1111672124974503029}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: 18cdcbf52fa70cc4382008f3a853f86a, type: 3}
+  m_Name: 
+  m_EditorClassIdentifier: 
+  timeToCutDown: 2
+  TargetTree: {fileID: 0}
+--- !u!114 &-335436304149331954
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 1111672124974503029}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: 722dcc6109c17c14b9a2e3ade3ac0e43, type: 3}
+  m_Name: 
+  m_EditorClassIdentifier: 
+  itemsInventory: 0
+  maxItemsInventory: 10
+  itemType: 0
 --- !u!1 &2613687795277725891
 GameObject:
   m_ObjectHideFlags: 0

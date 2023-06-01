@@ -11,6 +11,8 @@ public class GameRTSController : MonoBehaviour
 
     private CameraMovement cameraMovement;
 
+    private TaskManager taskManager;
+
     private void Awake() {
         selectedUnitRTSList = new List<UnitRTS>();
         selectionAreaTransform.gameObject.SetActive(false);
@@ -19,7 +21,7 @@ public class GameRTSController : MonoBehaviour
     // Start is called before the first frame update
     void Start()
     {
-        
+        taskManager = GetComponent<TaskManager>();
     }
 
     // Update is called once per frame
@@ -81,8 +83,6 @@ public class GameRTSController : MonoBehaviour
                 {
                     cameraMovement.isCharacterSelected = false;
                 }
-
-                Debug.Log(selectedUnitRTSList.Count);
             }
 
             if (Input.GetMouseButtonDown(1)){
