@@ -20,7 +20,7 @@ GameObject:
   - component: {fileID: -335436304149331954}
   m_Layer: 0
   m_Name: RomanPeasant
-  m_TagString: Untagged
+  m_TagString: Selectable
   m_Icon: {fileID: 0}
   m_NavMeshLayer: 0
   m_StaticEditorFlags: 0
@@ -212,7 +212,9 @@ MonoBehaviour:
   m_Name: 
   m_EditorClassIdentifier: 
   timeToCutDown: 2
+  timeToMine: 3
   TargetTree: {fileID: 0}
+  TargetMine: {fileID: 0}
 --- !u!114 &-335436304149331954
 MonoBehaviour:
   m_ObjectHideFlags: 0

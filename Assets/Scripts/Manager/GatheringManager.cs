@@ -4,8 +4,12 @@ using UnityEngine;
 
 public class GatheringManager : MonoBehaviour
 {
-    public int wood = 0;
-    // Start is called before the first frame update
+
+    public int Wood = 0;
+    private void Awake()
+    {
+
+    }
     void Start()
     {
         

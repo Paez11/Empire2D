@@ -6,18 +6,23 @@ public class TaskManager : MonoBehaviour
 {
     bool cuttingDown = false;
     bool canCutDown = true;
-    public float timeToCutDown = 2;
-    bool mining = false;
+    [SerializeField] float timeToCutDown = 2;
     Inventory inventory;
     GameRTSController gameRTSController;
     MovePositionDirect movePositionDirect;
+
+    GatheringManager gatheringManager;
     public GameObject TargetTree;
+
+    private Animator animator;
     // Start is called before the first frame update
     void Start()
     {
         inventory = GetComponent<Inventory>();
         movePositionDirect = GetComponent<MovePositionDirect>();
         gameRTSController = GameObject.Find("GameRTSController").GetComponent<GameRTSController>();
+        gatheringManager = GameObject.Find("GatheringManager").GetComponent<GatheringManager>();
+        animator = GetComponent<Animator>();
     }
 
     // Update is called once per frame
@@ -31,12 +36,12 @@ public class TaskManager : MonoBehaviour
         //if he doesn´t any resources in his inventory
         if(inventory.itemsInventory < inventory.maxItemsInventory)
         {
-            //gameRTSController.transform.position = TargetTree.transform.position;
             movePositionDirect.movePosition = TargetTree.transform.position;
             if(Vector3.Distance(TargetTree.transform.position, transform.position) < 2.1)
             {
                 if(canCutDown)
                 {
+                    animator.SetBool("Feling", true);
                     StartCoroutine(Tree());
                 }
                 //cut the object
@@ -45,13 +50,13 @@ public class TaskManager : MonoBehaviour
         }else
         {
             //if inventory full drop to the centerTown
-            //movePositionDirect.target = GameObject.Find("TownCenter");
-            //if(Vector3.Distance(GameObject.Find("TownCenter").transform.position, transform.position) < 2.1)
-            if(Vector3.Distance(TargetTree.transform.position, transform.position) < 2.1)
+            animator.SetBool("Feling", false);
+            movePositionDirect.movePosition = GameObject.Find("TownCenter").transform.position;
+            if(Vector3.Distance(GameObject.Find("TownCenter").transform.position, transform.position) < 2.1)
             {
                 //Deposit Items
                 if(inventory.itemType == itemType.Wood){
-                    //gameRTSController.tree += inventory.itemsInventory;
+                    gatheringManager.Wood += inventory.itemsInventory;
                     inventory.itemsInventory = 0;
                 }
             }
@@ -68,10 +73,6 @@ public class TaskManager : MonoBehaviour
         canCutDown = true;
     }
 
-    void Mining()
-    {
-
-    }
 
     public void StartCuttingDown(GameObject targetTree)
     {

@@ -16,4 +16,6 @@ public class Inventory : MonoBehaviour
     public int maxItemsInventory = 10;
     public itemType itemType;
 
+    List<itemType> itemTypes;
+    
 }

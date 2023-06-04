@@ -11,7 +11,7 @@ public class GameRTSController : MonoBehaviour
 
     private CameraMovement cameraMovement;
 
-    private TaskManager taskManager;
+    public GameObject SelectedGameObject = null;
 
     private void Awake() {
         selectedUnitRTSList = new List<UnitRTS>();
@@ -21,7 +21,7 @@ public class GameRTSController : MonoBehaviour
     // Start is called before the first frame update
     void Start()
     {
-        taskManager = GetComponent<TaskManager>();
+
     }
 
     // Update is called once per frame
@@ -36,67 +36,22 @@ public class GameRTSController : MonoBehaviour
                 startPosition = UtilsClass.GetMouseWorldPosition();
             }
 
-            if(Input.GetMouseButton(0)){
+            if(Input.GetMouseButton(0))
+            {
                 //Left Mouse Button Held Down
-
-                Vector3 currentMousePosition = UtilsClass.GetMouseWorldPosition();
-                Vector3 lowerLeft = new Vector3(
-                    Mathf.Min(startPosition.x, currentMousePosition.x),
-                    Mathf.Min(startPosition.y, currentMousePosition.y)
-                );
-                Vector3 upperRight = new Vector3(
-                    Mathf.Max(startPosition.x, currentMousePosition.x),
-                    Mathf.Max(startPosition.y, currentMousePosition.y)
-                );
-                selectionAreaTransform.position = lowerLeft;
-                selectionAreaTransform.localScale = upperRight -lowerLeft;
+                GetSelectedArea();
             }
 
-            if(Input.GetMouseButtonUp(0)){
+            if(Input.GetMouseButtonUp(0))
+            {
                 //Left Mouse Button Released
-                selectionAreaTransform.gameObject.SetActive(false);
-
-                Collider2D[] collider2DArray = Physics2D.OverlapAreaAll(startPosition, UtilsClass.GetMouseWorldPosition());
-
-                //Deselect All Units
-                foreach (UnitRTS unitRTS in selectedUnitRTSList)
-                {
-                    unitRTS.SetSelectedVisible(false);
-                }
-                
-                selectedUnitRTSList.Clear();
-
-                //Select All Units within an selection Area
-                foreach (Collider2D collider2D in collider2DArray)
-                {
-                    UnitRTS unitRTS = collider2D.GetComponent<UnitRTS>();
-                    if (unitRTS != null){
-                        unitRTS.SetSelectedVisible(true);
-                        selectedUnitRTSList.Add(unitRTS);
-                    }
-                }
-
-                if(selectedUnitRTSList.Count > 0)
-                {
-                    cameraMovement.isCharacterSelected = true;
-                }else
-                {
-                    cameraMovement.isCharacterSelected = false;
-                }
+                UnitsSelect();
             }
 
-            if (Input.GetMouseButtonDown(1)){
+            if (Input.GetMouseButtonDown(1))
+            {
                 // Right Mouse button pressed
-                Vector3 moveToPosition = UtilsClass.GetMouseWorldPosition();
-
-                List<Vector3> targetPositionList = GetPositionListAround(moveToPosition, new float[] {1f,5f,10f}, new int[]{5, 10, 20});
-
-                int targetPositionListIndex = 0;
-                foreach (UnitRTS unitRTS in selectedUnitRTSList)
-                {
-                    unitRTS.MoveTo(targetPositionList[targetPositionListIndex]);
-                    targetPositionListIndex = (targetPositionListIndex + 1) % targetPositionList.Count;
-                }
+                UnitsActionPerformance();
             }
         }
     }
@@ -131,5 +86,83 @@ public class GameRTSController : MonoBehaviour
 
     private Vector3 ApplyRotationToVector(Vector3 vec, float angle){
         return Quaternion.Euler(0,0, angle) * vec;
+    }
+
+    private void GetSelectedArea()
+    {
+        Vector3 currentMousePosition = UtilsClass.GetMouseWorldPosition();
+        Vector3 lowerLeft = new Vector3(
+            Mathf.Min(startPosition.x, currentMousePosition.x),
+            Mathf.Min(startPosition.y, currentMousePosition.y)
+        );
+        Vector3 upperRight = new Vector3(
+            Mathf.Max(startPosition.x, currentMousePosition.x),
+            Mathf.Max(startPosition.y, currentMousePosition.y)
+        );
+        selectionAreaTransform.position = lowerLeft;
+        selectionAreaTransform.localScale = upperRight -lowerLeft;
+    }
+
+    private void UnitsSelect()
+    {
+        selectionAreaTransform.gameObject.SetActive(false);
+
+        Collider2D[] collider2DArray = Physics2D.OverlapAreaAll(startPosition, UtilsClass.GetMouseWorldPosition());
+
+        //Deselect All Units
+        foreach (UnitRTS unitRTS in selectedUnitRTSList)
+        {
+            unitRTS.SetSelectedVisible(false);
+        }
+        
+        selectedUnitRTSList.Clear();
+
+        //Select All Units within an selection Area
+        foreach (Collider2D collider2D in collider2DArray)
+        {
+            UnitRTS unitRTS = collider2D.GetComponent<UnitRTS>();
+            if (unitRTS != null){
+                unitRTS.SetSelectedVisible(true);
+                selectedUnitRTSList.Add(unitRTS);
+            }
+        }
+
+        if(selectedUnitRTSList.Count > 0)
+        {
+            cameraMovement.isCharacterSelected = true;
+        }else
+        {
+            cameraMovement.isCharacterSelected = false;
+        }
+    }
+    private void UnitsActionPerformance()
+    {
+        Vector3 moveToPosition = UtilsClass.GetMouseWorldPosition();
+
+        List<Vector3> targetPositionList = GetPositionListAround(moveToPosition, new float[] {1f,5f,10f}, new int[]{5, 10, 20});
+
+        int targetPositionListIndex = 0;
+        foreach (UnitRTS unitRTS in selectedUnitRTSList)
+        {
+            Vector2 mousePosition = Camera.main.ScreenToWorldPoint(Input.mousePosition);
+            RaycastHit2D hit = Physics2D.Raycast(mousePosition, Vector2.down);
+            if(hit.collider != null)
+            {
+                if(hit.collider.tag == "Selectable")
+                {
+                    SelectedGameObject = hit.collider.gameObject;
+                    if(hit.collider.gameObject.GetComponent<ResourceType>())
+                    {
+                        if(hit.collider.gameObject.GetComponent<ResourceType>().resource == ResourceTypes.Wood){
+                            unitRTS.GetComponent<TaskManager>().StartCuttingDown(hit.collider.gameObject);
+                        }
+                    }
+                }
+            }else
+            {
+                unitRTS.MoveTo(targetPositionList[targetPositionListIndex]);
+                targetPositionListIndex = (targetPositionListIndex + 1) % targetPositionList.Count;
+            }
+        }
     }
 }
