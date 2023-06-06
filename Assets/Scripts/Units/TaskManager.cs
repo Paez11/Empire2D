@@ -85,7 +85,7 @@ public class TaskManager : MonoBehaviour
             animator.SetBool("Farming", false);
             animator.SetBool("Mining", false);
             movePositionDirect.movePosition = GameObject.Find("TownCenter").transform.position;
-            if (Vector3.Distance(GameObject.Find("TownCenter").transform.position, transform.position) < 2.1)
+            if (Vector3.Distance(GameObject.Find("TownCenter").transform.position, transform.position) < 6)
             {
                 foreach (ItemType item in inventory.ItemTypes)
                 {
@@ -109,6 +109,24 @@ public class TaskManager : MonoBehaviour
                     }   
                 }
                 inventory.ItemTypes.Clear();
+                if (TargetResource.GetComponent<ResourceType>().resource == currentResourceType)
+                {
+                    switch (currentResourceType)
+                    {
+                        case ItemType.Wood:
+                            animator.SetBool("Feling", true);
+                            break;
+                        case ItemType.Food:
+                            animator.SetBool("Farming", true);
+                            break;
+                        case ItemType.Stone:
+                            animator.SetBool("Mining", true);
+                            break;
+                        case ItemType.Gold:
+                            animator.SetBool("Mining", true);
+                            break;
+                    }
+                }
             }
         }
     }
@@ -130,5 +148,11 @@ public class TaskManager : MonoBehaviour
     {
         TargetResource = targetResource;
         IsGathering = true;
+    }
+
+    public void StopGathering()
+    {
+        TargetResource = null;
+        IsGathering = false;
     }
 }

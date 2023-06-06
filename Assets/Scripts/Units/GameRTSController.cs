@@ -153,16 +153,60 @@ public class GameRTSController : MonoBehaviour
                     SelectedGameObject = hit.collider.gameObject;
                     if(hit.collider.gameObject.GetComponent<ResourceType>())
                     {
-                        //if(hit.collider.gameObject.GetComponent<ResourceType>().resource.Equals(ItemType.Wood))
                         unitRTS.GetComponent<TaskManager>().currentResourceType = ItemType.None;
                         unitRTS.GetComponent<TaskManager>().StartGathering(hit.collider.gameObject);
+                        if(!hit.collider.gameObject.GetComponent<ResourceType>())
+                        {
+                            Debug.Log("Entra");
+                            unitRTS.GetComponent<TaskManager>().currentResourceType = ItemType.None;
+                            unitRTS.GetComponent<TaskManager>().StopGathering();
+                            unitRTS.MoveTo(targetPositionList[targetPositionListIndex]);
+                            targetPositionListIndex = (targetPositionListIndex + 1) % targetPositionList.Count;
+                        }
                     }
                 }
-            }else
+                else
+                {
+                    unitRTS.MoveTo(targetPositionList[targetPositionListIndex]);
+                    targetPositionListIndex = (targetPositionListIndex + 1) % targetPositionList.Count;
+                }
+            }
+            else
             {
                 unitRTS.MoveTo(targetPositionList[targetPositionListIndex]);
                 targetPositionListIndex = (targetPositionListIndex + 1) % targetPositionList.Count;
             }
         }
+        /*
+        foreach (UnitRTS unitRTS in selectedUnitRTSList)
+        {
+            Vector2 mousePosition = Camera.main.ScreenToWorldPoint(Input.mousePosition);
+            RaycastHit2D hit = Physics2D.Raycast(mousePosition, Vector2.zero);
+
+            if (hit.collider != null)
+            {
+                if (hit.collider.CompareTag("Resource"))
+                {
+                    SelectedGameObject = hit.collider.gameObject;
+
+                    if (SelectedGameObject.GetComponent<ResourceType>())
+                    {
+                        unitRTS.GetComponent<TaskManager>().currentResourceType = ItemType.None;
+                        unitRTS.GetComponent<TaskManager>().StartGathering(SelectedGameObject);
+                    }
+                }
+                else
+                {
+                    unitRTS.MoveTo(hit.point);
+                }
+            }
+            else
+            {
+                unitRTS.MoveTo(mousePosition);
+            }
+
+            targetPositionListIndex = (targetPositionListIndex + 1) % targetPositionList.Count;
+        }
+        */
     }
 }

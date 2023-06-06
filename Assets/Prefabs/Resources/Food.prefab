@@ -12,7 +12,7 @@ GameObject:
   - component: {fileID: -5971009942460895367}
   - component: {fileID: 3425552216038289114}
   - component: {fileID: 12160598757284721}
-  m_Layer: 0
+  m_Layer: 3
   m_Name: Food
   m_TagString: Resource
   m_Icon: {fileID: 0}

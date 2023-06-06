@@ -9,6 +9,7 @@ GameObject:
   serializedVersion: 6
   m_Component:
   - component: {fileID: 1111672124974503024}
+  - component: {fileID: 1820013907740876340}
   - component: {fileID: 1111672124974503027}
   - component: {fileID: 1111672124974503026}
   - component: {fileID: 4031646858537100298}
@@ -18,7 +19,7 @@ GameObject:
   - component: {fileID: 1320421354998377794}
   - component: {fileID: 6368326703390974008}
   - component: {fileID: -335436304149331954}
-  m_Layer: 0
+  m_Layer: 6
   m_Name: RomanPeasant
   m_TagString: Selectable
   m_Icon: {fileID: 0}
@@ -42,6 +43,28 @@ Transform:
   m_Father: {fileID: 0}
   m_RootOrder: 0
   m_LocalEulerAnglesHint: {x: 0, y: 0, z: 0}
+--- !u!195 &1820013907740876340
+NavMeshAgent:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 1111672124974503029}
+  m_Enabled: 1
+  m_AgentTypeID: 0
+  m_Radius: 0.62
+  m_Speed: 50
+  m_Acceleration: 0
+  avoidancePriority: 50
+  m_AngularSpeed: 0
+  m_StoppingDistance: 1.5
+  m_AutoTraverseOffMeshLink: 1
+  m_AutoBraking: 1
+  m_AutoRepath: 1
+  m_Height: 1.71
+  m_BaseOffset: 0.96
+  m_WalkableMask: 4294967295
+  m_ObstacleAvoidanceType: 4
 --- !u!212 &1111672124974503027
 SpriteRenderer:
   m_ObjectHideFlags: 0
@@ -185,7 +208,7 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: 218524cb2946dc540acdff0e1b75f61b, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
-  moveSpeed: 5
+  moveSpeed: 6
 --- !u!114 &1320421354998377794
 MonoBehaviour:
   m_ObjectHideFlags: 0
@@ -211,10 +234,9 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: 18cdcbf52fa70cc4382008f3a853f86a, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
-  timeToCutDown: 2
-  timeToMine: 3
-  TargetTree: {fileID: 0}
-  TargetMine: {fileID: 0}
+  TimeToGather: 2
+  TargetResource: {fileID: 0}
+  currentResourceType: 0
 --- !u!114 &-335436304149331954
 MonoBehaviour:
   m_ObjectHideFlags: 0
@@ -229,7 +251,8 @@ MonoBehaviour:
   m_EditorClassIdentifier: 
   itemsInventory: 0
   maxItemsInventory: 10
-  itemType: 0
+  ItemType: 0
+  ItemTypes: 
 --- !u!1 &2613687795277725891
 GameObject:
   m_ObjectHideFlags: 0
@@ -240,7 +263,7 @@ GameObject:
   m_Component:
   - component: {fileID: 3771333512289148580}
   - component: {fileID: 1202556280526899165}
-  m_Layer: 0
+  m_Layer: 6
   m_Name: Selected
   m_TagString: Untagged
   m_Icon: {fileID: 0}
@@ -324,7 +347,7 @@ GameObject:
   m_Component:
   - component: {fileID: 8431319218021168954}
   - component: {fileID: 646495856070594355}
-  m_Layer: 0
+  m_Layer: 6
   m_Name: Shadow
   m_TagString: Untagged
   m_Icon: {fileID: 0}
