@@ -148,14 +148,14 @@ public class GameRTSController : MonoBehaviour
             RaycastHit2D hit = Physics2D.Raycast(mousePosition, Vector2.down);
             if(hit.collider != null)
             {
-                if(hit.collider.tag == "Selectable")
+                if(hit.collider.tag == "Resource")
                 {
                     SelectedGameObject = hit.collider.gameObject;
                     if(hit.collider.gameObject.GetComponent<ResourceType>())
                     {
-                        if(hit.collider.gameObject.GetComponent<ResourceType>().resource == ResourceTypes.Wood){
-                            unitRTS.GetComponent<TaskManager>().StartCuttingDown(hit.collider.gameObject);
-                        }
+                        //if(hit.collider.gameObject.GetComponent<ResourceType>().resource.Equals(ItemType.Wood))
+                        unitRTS.GetComponent<TaskManager>().currentResourceType = ItemType.None;
+                        unitRTS.GetComponent<TaskManager>().StartGathering(hit.collider.gameObject);
                     }
                 }
             }else

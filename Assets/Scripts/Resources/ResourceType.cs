@@ -12,5 +12,6 @@ public enum ResourceTypes
 
 public class ResourceType : MonoBehaviour
 {
-    public ResourceTypes resource;
+    //public ResourceTypes resource;
+    public ItemType resource;
 }

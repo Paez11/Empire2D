@@ -2,7 +2,7 @@ using System.Collections;
 using System.Collections.Generic;
 using UnityEngine;
 
-public enum itemType
+public enum ItemType
 {
     None,
     Wood,
@@ -14,8 +14,8 @@ public class Inventory : MonoBehaviour
 {
     public int itemsInventory = 0;
     public int maxItemsInventory = 10;
-    public itemType itemType;
+    public ItemType ItemType;
 
-    List<itemType> itemTypes;
+    public List<ItemType> ItemTypes;
     
 }
