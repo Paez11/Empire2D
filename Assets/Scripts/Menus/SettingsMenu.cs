@@ -2,6 +2,7 @@ using System.Collections;
 using System.Collections.Generic;
 using UnityEngine;
 using UnityEngine.Audio;
+using UnityEngine.Events;
 using UnityEngine.UI;
 using TMPro;
 
@@ -12,21 +13,32 @@ public class SettingsMenu : MonoBehaviour
     [SerializeField] Slider musicSlider;
     [SerializeField] Slider soundSlider;
     [SerializeField] TMP_Dropdown  resolutionsDropDowns;
+    [SerializeField] TMP_Dropdown  qualityDropDowns;
+    [SerializeField] Toggle fullScreenToggle;
+    [SerializeField] Toggle vSyncToggle;
 
     public const string MIXER_GENERAL = "MainGeneralVolume";
     public const string MIXER_MUSIC = "MainMusicVolume";
     public const string MIXER_SOUND = "MainSoundVolume";
+    public const string SET_QUALITY = "MainQuality";
+    public const string SET_RESOLUTION_INDEX = "MainResolutionIndex";
+    public const string SET_FULLSCREEN = "MainFullscreen";
+    public const string SET_VSYNC = "MainVSync";
 
     Resolution[] resolutions;
+    int saveResolutionIndex = 0;
+    int currentResolutionIndex = 0;
 
-    public void Awake()
+    int fullScreen = 1;
+    int vSync = 0;
+
+    void Awake()
     {
         resolutions = Screen.resolutions;
         resolutionsDropDowns.ClearOptions();
 
         List<string> options = new List<string>();
 
-        int currentResolutionIndex = 0;
         for (int i = 0; i < resolutions.Length; i++)
         {
             string option = resolutions[i].width + " x " + resolutions[i].height;
@@ -44,18 +56,33 @@ public class SettingsMenu : MonoBehaviour
         soundSlider.onValueChanged.AddListener(SetSoundVolume);
     }
 
-    public void Start()
+    void Start()
     {
         generalSlider.value = PlayerPrefs.GetFloat(SettingsManager.GENERAL_KEY, 0.9f);
         musicSlider.value = PlayerPrefs.GetFloat(SettingsManager.MUSIC_KEY, 0.6f);
         soundSlider.value = PlayerPrefs.GetFloat(SettingsManager.SOUND_KEY, 0.8f);
+        
+        qualityDropDowns.value = PlayerPrefs.GetInt(SettingsManager.QUALITY_KEY, QualitySettings.GetQualityLevel());
+
+        saveResolutionIndex = PlayerPrefs.GetInt(SettingsManager.RESOLUTION_INDEX_KEY, currentResolutionIndex);
+        resolutionsDropDowns.value = saveResolutionIndex;
+
+        fullScreenToggle.isOn = PlayerPrefs.GetInt(SettingsManager.FULLSCREEN_KEY, Screen.fullScreen ? 1 : 0) == 1;
+        vSyncToggle.isOn = PlayerPrefs.GetInt(SettingsManager.VSYNC_KEY, QualitySettings.vSyncCount > 0 ? 1 : 0) == 1;
     }
 
-    public void OnDisable()
+    void OnDisable()
     {
         PlayerPrefs.SetFloat(SettingsManager.GENERAL_KEY, generalSlider.value);
         PlayerPrefs.SetFloat(SettingsManager.MUSIC_KEY, musicSlider.value);
         PlayerPrefs.SetFloat(SettingsManager.SOUND_KEY, soundSlider.value);
+
+        PlayerPrefs.SetInt(SettingsManager.QUALITY_KEY, QualitySettings.GetQualityLevel());
+        PlayerPrefs.SetInt(SettingsManager.RESOLUTION_INDEX_KEY, saveResolutionIndex);
+        PlayerPrefs.SetInt(SettingsManager.FULLSCREEN_KEY, fullScreen);
+        PlayerPrefs.SetInt(SettingsManager.VSYNC_KEY, vSync);
+        
+        PlayerPrefs.Save();
     }
 
     public void SetGeneralVolume (float value)
@@ -83,15 +110,24 @@ public class SettingsMenu : MonoBehaviour
     {
         Resolution resolution = resolutions[resolutionIndex];
         Screen.SetResolution(resolution.width, resolution.height, Screen.fullScreen);
+        saveResolutionIndex = resolutionIndex;
     }
 
     public void SetFullScreen (bool isFullscreen)
     {
         Screen.fullScreen = isFullscreen;
+        if(isFullscreen)
+            fullScreen = 1;
+        else
+            fullScreen = 0;
     }
 
     public void SetVsync (bool isVsync)
     {
         QualitySettings.vSyncCount = isVsync ? 1 : 0;
+        if(isVsync)
+            vSync = 1;
+        else
+            vSync = 0;
     }
 }

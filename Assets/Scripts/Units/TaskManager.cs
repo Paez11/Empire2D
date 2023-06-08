@@ -135,12 +135,19 @@ public class TaskManager : MonoBehaviour
     {
         CanGather = false;
         yield return new WaitForSeconds(TimeToGather);
-        if(Vector3.Distance(TargetResource.transform.position, transform.position) < 2.1)
+        if(TargetResource != null)
         {
-            inventory.ItemTypes.Add(TargetResource.GetComponent<ResourceType>().resource);
+            if(Vector3.Distance(TargetResource.transform.position, transform.position) < 2.1)
+            {
+                inventory.ItemTypes.Add(TargetResource.GetComponent<ResourceType>().resource);
+            }
+            
+            CanGather = true;
         }
-        
-        CanGather = true;
+        else
+        {
+            currentResourceType = ItemType.None;
+        }
     }
 
 

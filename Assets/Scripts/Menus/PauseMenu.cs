@@ -43,6 +43,7 @@ public class PauseMenu : MonoBehaviour
     public void GoToMainMenu(){
         Time.timeScale = 1f;
         isPaused = false;
+        SettingsManager.instance.PlayMenuAudioClip();
         SceneManager.LoadScene("MainMenu");
     }
 }

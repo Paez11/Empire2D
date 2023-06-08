@@ -5,17 +5,36 @@ using UnityEngine.SceneManagement;
 
 public class MainMenu : MonoBehaviour
 {
-    public void PlayGame(){
+    private GameObject mainMenu;
+    private SettingsMenu settingsMenu;
+    void Awake()
+    {
+        SettingsManager.instance.PlayMenuAudioClip();
+        // SettingsManager.instance.LoadVolume();
+        // SettingsManager.instance.LoadSettings();
+        settingsMenu = GameObject.Find("SettingsMenu").GetComponent<SettingsMenu>();
+    }
+
+    void Start()
+    {
+        settingsMenu.gameObject.SetActive(false);
+    }
+
+    public void PlayGame()
+    {
         // SceneManager.LoadScene(1);
         // SceneManager.LoadScene("TestScene");
+        SettingsManager.instance.ChangeAudioClip();
         SceneManager.LoadScene(SceneManager.GetActiveScene().buildIndex + 1);
     }
 
-    public void SettingsMenu(){
-        
+    public void SettingsMenu()
+    {
+        settingsMenu.gameObject.SetActive(true); 
     }
 
-    public void QuitGame(){
+    public void QuitGame()
+    {
         Application.Quit();
     }
 }
