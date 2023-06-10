@@ -1,11 +1,13 @@
 using System.Collections;
 using System.Collections.Generic;
 using UnityEngine;
+using UnityEngine.EventSystems;
 using Utils;
 
 public class GameRTSController : MonoBehaviour
 {
     [SerializeField] private Transform selectionAreaTransform;
+    [SerializeField] LayerMask resourceLayer;
     private Vector3 startPosition;
     private List<UnitRTS> selectedUnitRTSList;
 
@@ -39,13 +41,21 @@ public class GameRTSController : MonoBehaviour
             if(Input.GetMouseButton(0))
             {
                 //Left Mouse Button Held Down
-                GetSelectedArea();
+                if (!EventSystem.current.IsPointerOverGameObject())
+                {
+                    // Se realiza la selección del área en el mapa
+                    GetSelectedArea();
+                }
             }
 
             if(Input.GetMouseButtonUp(0))
             {
                 //Left Mouse Button Released
-                UnitsSelect();
+                if (!EventSystem.current.IsPointerOverGameObject())
+                {
+                    // Seleccionar las unidades en el área seleccionada
+                    UnitsSelect();
+                }
             }
 
             if (Input.GetMouseButtonDown(1))
@@ -145,8 +155,9 @@ public class GameRTSController : MonoBehaviour
         foreach (UnitRTS unitRTS in selectedUnitRTSList)
         {
             Vector3 mousePosition = Camera.main.ScreenToWorldPoint(Input.mousePosition);
-            RaycastHit2D hit = Physics2D.Raycast(mousePosition, mousePosition);
+            RaycastHit2D hit = Physics2D.Raycast(mousePosition, Vector2.one, 0.1f, resourceLayer);
             Debug.Log(hit.normal);
+            Debug.DrawRay(mousePosition, Vector2.zero, Color.red);
             if(hit.collider != null)
             {
                 if(hit.collider.tag == "Resource")

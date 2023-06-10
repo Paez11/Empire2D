@@ -1,5 +1,6 @@
 using System.Collections;
 using System.Collections.Generic;
+using TMPro;
 using UnityEngine;
 
 public class TaskManager : MonoBehaviour
@@ -16,7 +17,21 @@ public class TaskManager : MonoBehaviour
 
     private Animator animator;
     public ItemType currentResourceType = ItemType.None;
-    // Start is called before the first frame update
+
+    [SerializeField] TMP_Text woodResourceText;
+    private int wood;
+    [SerializeField] TMP_Text foodResourceText;
+    private int food;
+    [SerializeField] TMP_Text stoneResourceText;
+    private int stone;
+    [SerializeField] TMP_Text goldResourceText;
+    private int gold;
+
+    [SerializeField] AudioClip[] pickupSound;
+    [SerializeField] AudioSource selectedResourceSound;
+    [SerializeField] AudioClip[] gatherResourceSound;
+    [SerializeField] AudioSource resourceSound;
+
     void Start()
     {
         inventory = GetComponent<Inventory>();
@@ -24,6 +39,12 @@ public class TaskManager : MonoBehaviour
         gameRTSController = GameObject.Find("GameRTSController").GetComponent<GameRTSController>();
         gatheringManager = GameObject.Find("GatheringManager").GetComponent<GatheringManager>();
         animator = GetComponent<Animator>();
+
+        woodResourceText = transform.Find("WoodResourceText").GetComponent<TMP_Text>();
+        foodResourceText = transform.Find("FoodResourceText").GetComponent<TMP_Text>();
+        stoneResourceText = transform.Find("StoneResourceText").GetComponent<TMP_Text>();
+        goldResourceText = transform.Find("GoldResourceText").GetComponent<TMP_Text>();
+        UpdateInventoryText();
     }
 
     // Update is called once per frame
@@ -39,6 +60,7 @@ public class TaskManager : MonoBehaviour
                 animator.SetBool("Mining", false);
             }
             Gather();
+            UpdateInventoryText();
         }
             
     }
@@ -60,15 +82,19 @@ public class TaskManager : MonoBehaviour
                         {
                             case ItemType.Wood:
                                 animator.SetBool("Feling", true);
+                                StartCoroutine(PlayDelayedLoopedSound(gatherResourceSound[1], 1.2f));
                                 break;
                             case ItemType.Food:
                                 animator.SetBool("Farming", true);
+                                StartCoroutine(PlayDelayedLoopedSound(gatherResourceSound[0], 1.2f));
                                 break;
                             case ItemType.Stone:
                                 animator.SetBool("Mining", true);
+                                StartCoroutine(PlayDelayedLoopedSound(gatherResourceSound[2], 1.2f));
                                 break;
                             case ItemType.Gold:
                                 animator.SetBool("Mining", true);
+                                StartCoroutine(PlayDelayedLoopedSound(gatherResourceSound[3], 1.2f));
                                 break;
                         }
                     }
@@ -84,6 +110,7 @@ public class TaskManager : MonoBehaviour
             animator.SetBool("Feling", false);
             animator.SetBool("Farming", false);
             animator.SetBool("Mining", false);
+            resourceSound.Stop();
             movePositionDirect.movePosition = GameObject.Find("TownCenter").transform.position;
             if (Vector3.Distance(GameObject.Find("TownCenter").transform.position, transform.position) < 6)
             {
@@ -93,15 +120,19 @@ public class TaskManager : MonoBehaviour
                     {
                         case ItemType.Wood:
                             gatheringManager.Wood++;
+                            wood++;
                             break;
                         case ItemType.Food:
                             gatheringManager.Food++;
+                            food++;
                             break;
                         case ItemType.Stone:
                             gatheringManager.Stone++;
+                            stone++;
                             break;
                         case ItemType.Gold:
                             gatheringManager.Gold++;
+                            gold++;
                             break;
                         default:
                             gatheringManager.None++;
@@ -155,11 +186,58 @@ public class TaskManager : MonoBehaviour
     {
         TargetResource = targetResource;
         IsGathering = true;
+        int randomIndex = Random.Range(0, 2);
+        selectedResourceSound.clip = pickupSound[randomIndex];
+        selectedResourceSound.Play();
     }
 
     public void StopGathering()
     {
         TargetResource = null;
         IsGathering = false;
+    }
+
+    private void UpdateInventoryText()
+    {
+        if(inventory.ItemTypes.Count > 0)
+        {
+            switch(inventory.ItemType)
+            {
+                case ItemType.Wood:
+                    woodResourceText.text = "" + wood;
+                    break;
+                case ItemType.Food:
+                    foodResourceText.text = "" + food;
+                    break;
+                case ItemType.Stone:
+                    stoneResourceText.text = "" + stone;
+                    break;
+                case ItemType.Gold:
+                    goldResourceText.text = "" + gold;
+                    break;
+                default:
+                    
+                    break;
+            }
+        }
+        else
+        {
+            woodResourceText.text = "0";
+            foodResourceText.text = "0";
+            stoneResourceText.text = "0";
+            goldResourceText.text = "0";
+        }
+    }
+
+    private IEnumerator PlayDelayedLoopedSound(AudioClip soundClip, float delay)
+    {
+    AudioSource resourceSound = GetComponent<AudioSource>();
+
+    while (true)
+    {
+        resourceSound.clip = soundClip;
+        resourceSound.Play();
+        yield return new WaitForSeconds(delay);
+    }
     }
 }
