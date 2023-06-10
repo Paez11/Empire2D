@@ -17,6 +17,8 @@ public class SettingsMenu : MonoBehaviour
     [SerializeField] Toggle fullScreenToggle;
     [SerializeField] Toggle vSyncToggle;
 
+    [SerializeField] AudioSource audioSource;
+
     public const string MIXER_GENERAL = "MainGeneralVolume";
     public const string MIXER_MUSIC = "MainMusicVolume";
     public const string MIXER_SOUND = "MainSoundVolume";
@@ -101,13 +103,20 @@ public class SettingsMenu : MonoBehaviour
         audioMixer.SetFloat("MainSoundVolume", Mathf.Log10(value) * 20);
     }
 
+    public void OnSliderEndDrag()
+    {
+        audioSource.Play();
+    }
+
     public void SetQuality(int qualityIndex)
     {
+        audioSource.Play();
         QualitySettings.SetQualityLevel(qualityIndex);
     }
 
     public void SetResolution (int resolutionIndex)
     {
+        audioSource.Play();
         Resolution resolution = resolutions[resolutionIndex];
         Screen.SetResolution(resolution.width, resolution.height, Screen.fullScreen);
         saveResolutionIndex = resolutionIndex;
@@ -115,6 +124,7 @@ public class SettingsMenu : MonoBehaviour
 
     public void SetFullScreen (bool isFullscreen)
     {
+        audioSource.Play();
         Screen.fullScreen = isFullscreen;
         if(isFullscreen)
             fullScreen = 1;
@@ -124,10 +134,16 @@ public class SettingsMenu : MonoBehaviour
 
     public void SetVsync (bool isVsync)
     {
+        audioSource.Play();
         QualitySettings.vSyncCount = isVsync ? 1 : 0;
         if(isVsync)
             vSync = 1;
         else
             vSync = 0;
+    }
+
+    public void MainMenu()
+    {
+        audioSource.Play();
     }
 }

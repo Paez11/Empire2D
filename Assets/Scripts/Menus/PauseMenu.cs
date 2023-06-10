@@ -7,6 +7,7 @@ public class PauseMenu : MonoBehaviour
 {
     public GameObject pauseMenu;
     public KeyCode pauseKey;
+    [SerializeField] AudioSource audioSource;
 
     public static bool isPaused;
 
@@ -30,18 +31,21 @@ public class PauseMenu : MonoBehaviour
 
     public void PauseGame(){
         pauseMenu.SetActive(true);
+        audioSource.Play();
         Time.timeScale = 0f;
         isPaused = true;
     }
 
     public void ResumeGame(){
         pauseMenu.SetActive(false);
+        audioSource.Play();
         Time.timeScale = 1f;
         isPaused = false;
     }
 
     public void GoToMainMenu(){
         Time.timeScale = 1f;
+        audioSource.Play();
         isPaused = false;
         SettingsManager.instance.PlayMenuAudioClip();
         SceneManager.LoadScene("MainMenu");

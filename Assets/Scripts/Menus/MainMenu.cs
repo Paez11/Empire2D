@@ -7,6 +7,7 @@ public class MainMenu : MonoBehaviour
 {
     private GameObject mainMenu;
     private SettingsMenu settingsMenu;
+    [SerializeField] AudioSource audioSource;
     void Awake()
     {
         SettingsManager.instance.PlayMenuAudioClip();
@@ -24,17 +25,20 @@ public class MainMenu : MonoBehaviour
     {
         // SceneManager.LoadScene(1);
         // SceneManager.LoadScene("TestScene");
+        audioSource.Play();
         SettingsManager.instance.ChangeAudioClip();
         SceneManager.LoadScene(SceneManager.GetActiveScene().buildIndex + 1);
     }
 
     public void SettingsMenu()
     {
+        audioSource.Play();
         settingsMenu.gameObject.SetActive(true); 
     }
 
     public void QuitGame()
     {
+        audioSource.Play();
         Application.Quit();
     }
 }

@@ -21,10 +21,10 @@ public class MaterialsManager : MonoBehaviour
         stone = 100f;
         gold = 0f;
         
-        woodText.text = "Wood: " + wood.ToString();
-        foodText.text = "Food: " + food.ToString();
-        stoneText.text = "Stone: " + stone.ToString();
-        goldText.text = "Gold: " + gold.ToString();
+        woodText.text = wood.ToString();
+        foodText.text = food.ToString();
+        stoneText.text = stone.ToString();
+        goldText.text = gold.ToString();
     }
 
     // Update is called once per frame
