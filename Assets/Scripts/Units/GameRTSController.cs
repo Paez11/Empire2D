@@ -1,88 +1,71 @@
+using System;
 using System.Collections;
 using System.Collections.Generic;
 using UnityEngine;
+using UnityEngine.EventSystems;
 using Utils;
 
 public class GameRTSController : MonoBehaviour
 {
     [SerializeField] private Transform selectionAreaTransform;
+    [SerializeField] LayerMask resourceLayer;
     private Vector3 startPosition;
     private List<UnitRTS> selectedUnitRTSList;
+
+    private CameraMovement cameraMovement;
+
+    public GameObject SelectedGameObject = null;
 
     private void Awake() {
         selectedUnitRTSList = new List<UnitRTS>();
         selectionAreaTransform.gameObject.SetActive(false);
+        cameraMovement = FindObjectOfType<CameraMovement>();
+
+        //TaskManager.OnResourceClicked += Resource_OnResourceClicked;
     }
+
     // Start is called before the first frame update
     void Start()
     {
-        
+
     }
 
     // Update is called once per frame
     void Update()
     {
-        if (Input.GetMouseButtonDown(0))
-        {
-            //Left Mouse Button Pressed
-            selectionAreaTransform.gameObject.SetActive(true);
-            startPosition = UtilsClass.GetMouseWorldPosition();
-        }
+        if(!PauseMenu.isPaused){
 
-        if(Input.GetMouseButton(0)){
-            //Left Mouse Button Held Down
-
-            Vector3 currentMousePosition = UtilsClass.GetMouseWorldPosition();
-            Vector3 lowerLeft = new Vector3(
-                Mathf.Min(startPosition.x, currentMousePosition.x),
-                Mathf.Min(startPosition.y, currentMousePosition.y)
-            );
-            Vector3 upperRight = new Vector3(
-                Mathf.Max(startPosition.x, currentMousePosition.x),
-                Mathf.Max(startPosition.y, currentMousePosition.y)
-            );
-            selectionAreaTransform.position = lowerLeft;
-            selectionAreaTransform.localScale = upperRight -lowerLeft;
-        }
-
-        if(Input.GetMouseButtonUp(0)){
-            //Left Mouse Button Released
-            selectionAreaTransform.gameObject.SetActive(false);
-
-            Collider2D[] collider2DArray = Physics2D.OverlapAreaAll(startPosition, UtilsClass.GetMouseWorldPosition());
-
-            //Deselect All Units
-            foreach (UnitRTS unitRTS in selectedUnitRTSList)
+            if (Input.GetMouseButtonDown(0))
             {
-                unitRTS.SetSelectedVisible(false);
+                //Left Mouse Button Pressed
+                selectionAreaTransform.gameObject.SetActive(true);
+                startPosition = UtilsClass.GetMouseWorldPosition();
             }
-            
-            selectedUnitRTSList.Clear();
 
-            //Select All Units within an selection Area
-            foreach (Collider2D collider2D in collider2DArray)
+            if(Input.GetMouseButton(0))
             {
-                UnitRTS unitRTS = collider2D.GetComponent<UnitRTS>();
-                if (unitRTS != null){
-                    unitRTS.SetSelectedVisible(true);
-                    selectedUnitRTSList.Add(unitRTS);
+                //Left Mouse Button Held Down
+                if (!EventSystem.current.IsPointerOverGameObject())
+                {
+                    // Se realiza la selección del área en el mapa
+                    GetSelectedArea();
                 }
             }
 
-            Debug.Log(selectedUnitRTSList.Count);
-        }
-
-        if (Input.GetMouseButtonDown(1)){
-            // Right Mouse button pressed
-            Vector3 moveToPosition = UtilsClass.GetMouseWorldPosition();
-
-            List<Vector3> targetPositionList = GetPositionListAround(moveToPosition, new float[] {1f,5f,10f}, new int[]{5, 10, 20});
-
-            int targetPositionListIndex = 0;
-            foreach (UnitRTS unitRTS in selectedUnitRTSList)
+            if(Input.GetMouseButtonUp(0))
             {
-                unitRTS.MoveTo(targetPositionList[targetPositionListIndex]);
-                targetPositionListIndex = (targetPositionListIndex + 1) % targetPositionList.Count;
+                //Left Mouse Button Released
+                if (!EventSystem.current.IsPointerOverGameObject())
+                {
+                    // Seleccionar las unidades en el área seleccionada
+                    UnitsSelect();
+                }
+            }
+
+            if (Input.GetMouseButtonDown(1))
+            {
+                // Right Mouse button pressed
+                UnitsActionPerformance();
             }
         }
     }
@@ -117,5 +100,97 @@ public class GameRTSController : MonoBehaviour
 
     private Vector3 ApplyRotationToVector(Vector3 vec, float angle){
         return Quaternion.Euler(0,0, angle) * vec;
+    }
+
+    private void GetSelectedArea()
+    {
+        Vector3 currentMousePosition = UtilsClass.GetMouseWorldPosition();
+        Vector3 lowerLeft = new Vector3(
+            Mathf.Min(startPosition.x, currentMousePosition.x),
+            Mathf.Min(startPosition.y, currentMousePosition.y)
+        );
+        Vector3 upperRight = new Vector3(
+            Mathf.Max(startPosition.x, currentMousePosition.x),
+            Mathf.Max(startPosition.y, currentMousePosition.y)
+        );
+        selectionAreaTransform.position = lowerLeft;
+        selectionAreaTransform.localScale = upperRight -lowerLeft;
+    }
+
+    private void UnitsSelect()
+    {
+        selectionAreaTransform.gameObject.SetActive(false);
+
+        Collider2D[] collider2DArray = Physics2D.OverlapAreaAll(startPosition, UtilsClass.GetMouseWorldPosition());
+
+        //Deselect All Units
+        foreach (UnitRTS unitRTS in selectedUnitRTSList)
+        {
+            unitRTS.SetSelectedVisible(false);
+        }
+        
+        selectedUnitRTSList.Clear();
+
+        //Select All Units within an selection Area
+        foreach (Collider2D collider2D in collider2DArray)
+        {
+            UnitRTS unitRTS = collider2D.GetComponent<UnitRTS>();
+            if (unitRTS != null){
+                unitRTS.SetSelectedVisible(true);
+                selectedUnitRTSList.Add(unitRTS);
+            }
+        }
+
+        if(selectedUnitRTSList.Count > 0)
+        {
+            cameraMovement.isCharacterSelected = true;
+        }else
+        {
+            cameraMovement.isCharacterSelected = false;
+        }
+    }
+    private void UnitsActionPerformance()
+    {
+        Vector3 moveToPosition = UtilsClass.GetMouseWorldPosition();
+
+        List<Vector3> targetPositionList = GetPositionListAround(moveToPosition, new float[] {1f,5f,10f}, new int[]{5, 10, 20});
+
+        int targetPositionListIndex = 0;
+        foreach (UnitRTS unitRTS in selectedUnitRTSList)
+        {
+            Vector3 mousePosition = Camera.main.ScreenToWorldPoint(Input.mousePosition);
+            RaycastHit2D hit = Physics2D.Raycast(mousePosition, Vector2.one, 0.1f, resourceLayer);
+            Debug.Log(hit.normal);
+            Debug.DrawRay(mousePosition, Vector2.zero, Color.red);
+            if(hit.collider != null)
+            {
+                if(hit.collider.tag == "Resource")
+                {
+                    SelectedGameObject = hit.collider.gameObject;
+                    if(hit.collider.gameObject.GetComponent<ResourceType>())
+                    {
+                        unitRTS.GetComponent<TaskManager>().currentResourceType = ItemType.None;
+                        unitRTS.GetComponent<TaskManager>().StartGathering(hit.collider.gameObject);
+                    }
+                }
+                else
+                {
+                    unitRTS.GetComponent<TaskManager>().currentResourceType = ItemType.None;
+                    unitRTS.GetComponent<TaskManager>().StopGathering();
+                    unitRTS.MoveTo(targetPositionList[targetPositionListIndex]);
+                    targetPositionListIndex = (targetPositionListIndex + 1) % targetPositionList.Count;
+                }
+            }
+            else
+            {
+                unitRTS.MoveTo(targetPositionList[targetPositionListIndex]);
+                targetPositionListIndex = (targetPositionListIndex + 1) % targetPositionList.Count;
+            }
+        }
+    }
+
+    private void Resource_OnResourceClicked(object sender, EventArgs e)
+    {
+        TaskManager taskManager = sender as TaskManager;
     }
 }
