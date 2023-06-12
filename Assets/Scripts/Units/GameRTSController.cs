@@ -1,3 +1,4 @@
+using System;
 using System.Collections;
 using System.Collections.Generic;
 using UnityEngine;
@@ -19,7 +20,10 @@ public class GameRTSController : MonoBehaviour
         selectedUnitRTSList = new List<UnitRTS>();
         selectionAreaTransform.gameObject.SetActive(false);
         cameraMovement = FindObjectOfType<CameraMovement>();
+
+        //TaskManager.OnResourceClicked += Resource_OnResourceClicked;
     }
+
     // Start is called before the first frame update
     void Start()
     {
@@ -183,5 +187,10 @@ public class GameRTSController : MonoBehaviour
                 targetPositionListIndex = (targetPositionListIndex + 1) % targetPositionList.Count;
             }
         }
+    }
+
+    private void Resource_OnResourceClicked(object sender, EventArgs e)
+    {
+        TaskManager taskManager = sender as TaskManager;
     }
 }

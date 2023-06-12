@@ -11,7 +11,7 @@ GameObject:
   - component: {fileID: 8607200224464323828}
   - component: {fileID: -5011594642432414547}
   - component: {fileID: -2314511951730587910}
-  - component: {fileID: 4860864960186323581}
+  - component: {fileID: -8974670959703494851}
   - component: {fileID: 462459616692471112}
   - component: {fileID: 6079651974748386084}
   m_Layer: 3
@@ -114,7 +114,7 @@ BoxCollider2D:
   serializedVersion: 2
   m_Size: {x: 1.1501067, y: 0.9567766}
   m_EdgeRadius: 0
---- !u!60 &4860864960186323581
+--- !u!60 &-8974670959703494851
 PolygonCollider2D:
   m_ObjectHideFlags: 0
   m_CorrespondingSourceObject: {fileID: 0}
@@ -145,7 +145,7 @@ PolygonCollider2D:
       - {x: 0.42499998, y: 0.26999998}
       - {x: 0.305, y: 0.35999998}
       - {x: 0.13499999, y: 0.39999998}
-      - {x: -0.114999995, y: 0.39999998}
+      - {x: -0.028313775, y: 0.4053229}
       - {x: -0.305, y: 0.34}
       - {x: -0.355, y: 0.29999998}
       - {x: -0.405, y: 0.12}
@@ -157,6 +157,7 @@ PolygonCollider2D:
       - {x: -0.355, y: -0.37}
       - {x: -0.275, y: -0.39999998}
       - {x: -0.035, y: -0.39999998}
+      - {x: 0.12123102, y: -0.34048343}
       - {x: 0.175, y: -0.32}
       - {x: 0.275, y: -0.26999998}
 --- !u!114 &462459616692471112
@@ -179,7 +180,7 @@ AudioSource:
   m_PrefabInstance: {fileID: 0}
   m_PrefabAsset: {fileID: 0}
   m_GameObject: {fileID: 1230560218181130342}
-  m_Enabled: 1
+  m_Enabled: 0
   serializedVersion: 4
   OutputAudioMixerGroup: {fileID: 1031171284744995027, guid: 3aff854c2e7d2ba4cb602a6ffbb0281a, type: 2}
   m_audioClip: {fileID: 8300000, guid: e9536d3bbf97566469bbe26bcdd99494, type: 3}

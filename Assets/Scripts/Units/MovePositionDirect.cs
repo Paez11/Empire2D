@@ -22,7 +22,7 @@ public class MovePositionDirect : MonoBehaviour, IMoveVelocity, IMovePosition
     public void SetMovePosition(Vector3 movePosition)
     {
         this.movePosition = movePosition;
-        SetAgentPosition(this.movePosition);
+        //SetAgentPosition(this.movePosition);      Active with NavMeshAgent
     }
 
     // Update is called once per frame
