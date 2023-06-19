@@ -12,6 +12,7 @@ GameObject:
   - component: {fileID: 3921317431514801755}
   - component: {fileID: 3442810679440248815}
   - component: {fileID: 2744856866125541854}
+  - component: {fileID: 5052261187413331094}
   m_Layer: 7
   m_Name: LumberCamp
   m_TagString: Selectable
@@ -138,3 +139,19 @@ MonoBehaviour:
   m_Area: 1
   m_IgnoreFromBuild: 0
   m_AffectedAgents: 00000000
+--- !u!114 &5052261187413331094
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 3742443521934885828}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: fcc7b953095491143a88f8071cf7262f, type: 3}
+  m_Name: 
+  m_EditorClassIdentifier: 
+  woodCost: 75
+  foodCost: 0
+  stoneCost: 0
+  goldCost: 0

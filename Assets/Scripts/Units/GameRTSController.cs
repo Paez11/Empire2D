@@ -7,6 +7,9 @@ using Utils;
 
 public class GameRTSController : MonoBehaviour
 {
+    [SerializeField] private Transform[] goldNodeTransformArray;
+    [SerializeField] private Transform storageTransform;
+
     [SerializeField] private Transform selectionAreaTransform;
     [SerializeField] LayerMask resourceLayer;
     private Vector3 startPosition;
@@ -16,12 +19,18 @@ public class GameRTSController : MonoBehaviour
 
     public GameObject SelectedGameObject = null;
 
+    private static GameRTSController instance;
+    private List<ResourceNode> resourceNodeList;
+    [SerializeField] private GathererAI gathererAI;
+
     private void Awake() {
+
         selectedUnitRTSList = new List<UnitRTS>();
         selectionAreaTransform.gameObject.SetActive(false);
         cameraMovement = FindObjectOfType<CameraMovement>();
 
         //TaskManager.OnResourceClicked += Resource_OnResourceClicked;
+        ResourceNode.OnResourceNodeClicked += Resource_OnResourceClicked;
     }
 
     // Start is called before the first frame update
@@ -152,8 +161,7 @@ public class GameRTSController : MonoBehaviour
     private void UnitsActionPerformance()
     {
         Vector3 moveToPosition = UtilsClass.GetMouseWorldPosition();
-
-        List<Vector3> targetPositionList = GetPositionListAround(moveToPosition, new float[] {1f,5f,10f}, new int[]{5, 10, 20});
+        List<Vector3> targetPositionList = GetPositionListAround(moveToPosition, new float[] {1f, 5f, 10f}, new int[] {5, 10, 20});
 
         int targetPositionListIndex = 0;
         foreach (UnitRTS unitRTS in selectedUnitRTSList)
@@ -162,12 +170,14 @@ public class GameRTSController : MonoBehaviour
             RaycastHit2D hit = Physics2D.Raycast(mousePosition, Vector2.one, 0.1f, resourceLayer);
             Debug.Log(hit.normal);
             Debug.DrawRay(mousePosition, Vector2.zero, Color.red);
-            if(hit.collider != null)
+
+            if (hit.collider != null)
             {
-                if(hit.collider.tag == "Resource")
+                if (hit.collider.CompareTag("Resource"))
                 {
                     SelectedGameObject = hit.collider.gameObject;
-                    if(hit.collider.gameObject.GetComponent<ResourceType>())
+
+                    if (SelectedGameObject != null)
                     {
                         unitRTS.GetComponent<TaskManager>().currentResourceType = ItemType.None;
                         unitRTS.GetComponent<TaskManager>().StartGathering(hit.collider.gameObject);
@@ -191,6 +201,69 @@ public class GameRTSController : MonoBehaviour
 
     private void Resource_OnResourceClicked(object sender, EventArgs e)
     {
-        TaskManager taskManager = sender as TaskManager;
+        ResourceNode resourceNode = sender as ResourceNode;
+        gathererAI.SetResourceNode(resourceNode);
+        //TaskManager taskManager = sender as TaskManager;
     }
+
+    /*
+
+    public ResourceNode GetResourceNode()
+    {
+        List<ResourceNode> tmpResourceNodeList = new List<ResourceNode>(resourceNodeList);
+        for(int i=0; i < tmpResourceNodeList.Count; i++){
+            if(!tmpResourceNodeList[i].HasResource()){
+                //No more resource
+                tmpResourceNodeList.RemoveAt(i);
+                i--;
+            }
+        }
+        if(tmpResourceNodeList.Count > 0)
+        {
+            return tmpResourceNodeList[UnityEngine.Random.Range(0, tmpResourceNodeList.Count)];
+        }
+        else 
+        {
+            return null;
+        }
+
+    }
+    public ResourceNode GetResourceNodeNearPosition(Vector3 position)
+    {
+        float maxDistance = 20f;
+        List<ResourceNode> tmpResourceNodeList = new List<ResourceNode>(resourceNodeList);
+        for(int i=0; i < tmpResourceNodeList.Count; i++){
+            if(!tmpResourceNodeList[i].HasResource() || Vector3.Distance(position, tmpResourceNodeList[i].GetPosition()) > maxDistance){
+                //No more resource
+                tmpResourceNodeList.RemoveAt(i);
+                i--;
+            }
+        }
+        if(tmpResourceNodeList.Count > 0)
+        {
+            return tmpResourceNodeList[UnityEngine.Random.Range(0, tmpResourceNodeList.Count)];
+        }
+        else 
+        {
+            return null;
+        }
+
+    }
+    private Transform GetStorage()
+    {
+        return storageTransform;
+    }
+    public static Transform GetStorage_Static()
+    {
+        return instance.GetStorage();
+    }
+    public static ResourceNode GetResourceNode_Static()
+    {
+        return instance.GetResourceNode();
+    }
+    public static ResourceNode GetResourceNodeNearPosition_Static(Vector3 position)
+    {
+        return instance.GetResourceNodeNearPosition(position);
+    }
+    */
 }

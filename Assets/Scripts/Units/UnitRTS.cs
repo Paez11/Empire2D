@@ -10,6 +10,10 @@ public class UnitRTS : MonoBehaviour
     [SerializeField] AudioSource audioSource;
     [SerializeField] AudioSource selectedAudio;
 
+    // private BuildingManager buildingManager; // Referencia al BuildingManager
+    // private GameObject currentBuilding; // Referencia al edificio actualmente en construcción
+    // private bool isBuilding; // Indica si la unidad está construyendo
+
     private void Awake() {
         selectedGameObject = transform.Find("Selected").gameObject;
         hud = transform.Find("PeasantHUD").gameObject;
@@ -17,6 +21,9 @@ public class UnitRTS : MonoBehaviour
         SetSelectedVisible(false);
         hud.SetActive(false);
         audioSource.gameObject.SetActive(true);
+
+        // buildingManager = BuildingManager.Instance;
+        // isBuilding = false;
     }
 
     public void SetSelectedVisible(bool visible){
@@ -28,10 +35,5 @@ public class UnitRTS : MonoBehaviour
 
     public void MoveTo(Vector3 targetPosition){
         movePosition.SetMovePosition(targetPosition);
-    }
-
-    public void SelectBuild()
-    {
-        audioSource.Play();
     }
 }

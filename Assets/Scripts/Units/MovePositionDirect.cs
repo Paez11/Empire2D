@@ -13,16 +13,16 @@ public class MovePositionDirect : MonoBehaviour, IMoveVelocity, IMovePosition
 
     private void Awake()
     {
-        agent = GetComponent<NavMeshAgent>();
-        agent.updateRotation = false;
-        agent.updateUpAxis = false;
+        // agent = GetComponent<NavMeshAgent>();
+        // agent.updateRotation = false;
+        // agent.updateUpAxis = false;
         movePosition = transform.position;
     }
 
     public void SetMovePosition(Vector3 movePosition)
     {
         this.movePosition = movePosition;
-        //SetAgentPosition(this.movePosition);      Active with NavMeshAgent
+        //SetAgentPosition(this.movePosition);      //Active with NavMeshAgent
     }
 
     // Update is called once per frame

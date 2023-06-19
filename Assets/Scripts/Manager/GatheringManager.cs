@@ -40,4 +40,17 @@ public class GatheringManager : MonoBehaviour
         stoneText.text = Stone.ToString();
         goldText.text = Gold.ToString();
     }
+
+    public bool HasEnoughResources(int woodCost, int foodCost, int stoneCost, int goldCost)
+    {
+        return Wood >= woodCost && Food >= foodCost && Stone >= stoneCost && Gold >= goldCost;
+    }
+
+    public void SpendResources(int woodCost, int foodCost, int stoneCost, int goldCost)
+    {
+        Wood -= woodCost;
+        Food -= foodCost;
+        Stone -= stoneCost;
+        Gold -= goldCost;
+    }
 }

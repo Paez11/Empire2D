@@ -13,8 +13,7 @@ public class TaskManager : MonoBehaviour
     [SerializeField] float TimeToGather = 2;
     Inventory inventory;
     GameRTSController gameRTSController;
-    MovePositionDirect movePositionDirect;
-
+    UnitRTS unit;
     GatheringManager gatheringManager;
     public GameObject TargetResource;
 
@@ -39,7 +38,7 @@ public class TaskManager : MonoBehaviour
     void Start()
     {
         inventory = GetComponent<Inventory>();
-        movePositionDirect = GetComponent<MovePositionDirect>();
+        unit = GetComponent<UnitRTS>();
         gameRTSController = GameObject.Find("GameRTSController").GetComponent<GameRTSController>();
         gatheringManager = GameObject.Find("GatheringManager").GetComponent<GatheringManager>();
         animator = GetComponent<Animator>();
@@ -67,15 +66,14 @@ public class TaskManager : MonoBehaviour
             }
             Gather();
             //UpdateInventoryText();
-        }
-            
+        }         
     }
     void Gather()
     {
         // If there are no resources in the inventory
         if (inventory.ItemTypes.Count < inventory.maxItemsInventory)
         {
-            movePositionDirect.movePosition = TargetResource.transform.position;
+            unit.MoveTo(TargetResource.transform.position);
             if (Vector3.Distance(transform.position, TargetResource.transform.position) < 1)
             {
                 if (CanGather)
@@ -117,7 +115,7 @@ public class TaskManager : MonoBehaviour
             animator.SetBool("Farming", false);
             animator.SetBool("Mining", false);
             StopCoroutine(soundCoroutine);
-            movePositionDirect.movePosition = GameObject.Find("TownCenter").transform.position;
+            unit.MoveTo(GameObject.Find("TownCenter").transform.position);
             if (Vector3.Distance(GameObject.Find("TownCenter").transform.position, transform.position) < 6)
             {
                 foreach (ItemType item in inventory.ItemTypes)
@@ -145,7 +143,7 @@ public class TaskManager : MonoBehaviour
                             goldResourceText.text = gold.ToString();
                             break;
                         default:
-                            gatheringManager.None++;
+                            gatheringManager.None = 0;
                             break;
                     }   
                 }
@@ -210,7 +208,7 @@ public class TaskManager : MonoBehaviour
         }
         else
         {
-            currentResourceType = ItemType.None;
+            currentResourceType = ItemType.None; 
         }
     }
 
@@ -219,10 +217,6 @@ public class TaskManager : MonoBehaviour
     {
         TargetResource = targetResource;
         IsGathering = true;
-        // targetResource.GetComponent<Button_Sprite>().ClickFunc = () => {
-        //     if(OnResourceClicked != null)
-        //         OnResourceClicked(this, EventArgs.Empty);
-        // };
         int randomIndex = UnityEngine.Random.Range(0, 2);
         selectedResourceSound.clip = pickupSound[randomIndex];
         selectedResourceSound.Play();
@@ -230,19 +224,21 @@ public class TaskManager : MonoBehaviour
 
     public void StopGathering()
     {
+        currentResourceType = ItemType.None; 
         TargetResource = null;
         IsGathering = false;
+        CanGather = false;
     }
 
     private IEnumerator PlayDelayedLoopedSound(AudioClip soundClip, float delay)
     {
-    AudioSource resourceSound = GetComponent<AudioSource>();
+        AudioSource resourceSound = GetComponent<AudioSource>();
 
-    while (true)
-    {
-        resourceSound.clip = soundClip;
-        resourceSound.Play();
-        yield return new WaitForSeconds(delay);
-    }
+        while (true)
+        {
+            resourceSound.clip = soundClip;
+            resourceSound.Play();
+            yield return new WaitForSeconds(delay);
+        }
     }
 }

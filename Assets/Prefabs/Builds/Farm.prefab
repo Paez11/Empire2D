@@ -12,9 +12,11 @@ GameObject:
   - component: {fileID: -9043628964065737222}
   - component: {fileID: -2343251289377586428}
   - component: {fileID: -3342208878326777191}
-  m_Layer: 7
+  - component: {fileID: 8624627153357455930}
+  - component: {fileID: 9137561342962967400}
+  m_Layer: 3
   m_Name: Farm
-  m_TagString: Selectable
+  m_TagString: Resource
   m_Icon: {fileID: 0}
   m_NavMeshLayer: 0
   m_StaticEditorFlags: 0
@@ -145,3 +147,32 @@ MonoBehaviour:
   m_Area: 0
   m_IgnoreFromBuild: 0
   m_AffectedAgents: 00000000
+--- !u!114 &8624627153357455930
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 6376395760855508713}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: fcc7b953095491143a88f8071cf7262f, type: 3}
+  m_Name: 
+  m_EditorClassIdentifier: 
+  woodCost: 40
+  foodCost: 10
+  stoneCost: 0
+  goldCost: 0
+--- !u!114 &9137561342962967400
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 6376395760855508713}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: 27b88fea2f70ba540ae29a84e27e8572, type: 3}
+  m_Name: 
+  m_EditorClassIdentifier: 
+  resource: 2

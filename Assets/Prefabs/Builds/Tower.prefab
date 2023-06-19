@@ -12,6 +12,7 @@ GameObject:
   - component: {fileID: 6969652205603605816}
   - component: {fileID: 3341971285843256641}
   - component: {fileID: 4130334823891317962}
+  - component: {fileID: 3277357811815629452}
   m_Layer: 7
   m_Name: Tower
   m_TagString: Selectable
@@ -196,3 +197,19 @@ MonoBehaviour:
   m_Area: 1
   m_IgnoreFromBuild: 0
   m_AffectedAgents: 00000000
+--- !u!114 &3277357811815629452
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 4305463301532889382}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: fcc7b953095491143a88f8071cf7262f, type: 3}
+  m_Name: 
+  m_EditorClassIdentifier: 
+  woodCost: 0
+  foodCost: 0
+  stoneCost: 75
+  goldCost: 0

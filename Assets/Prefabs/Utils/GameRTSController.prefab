@@ -46,11 +46,14 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: 1763334e8e7d8cc448baf5e613b48237, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
+  goldNodeTransformArray: []
+  storageTransform: {fileID: 0}
   selectionAreaTransform: {fileID: 0}
   resourceLayer:
     serializedVersion: 2
     m_Bits: 8
   SelectedGameObject: {fileID: 0}
+  gathererAI: {fileID: 0}
 --- !u!114 &6774591723073486082
 MonoBehaviour:
   m_ObjectHideFlags: 0

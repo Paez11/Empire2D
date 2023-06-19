@@ -12,6 +12,7 @@ GameObject:
   - component: {fileID: 8715916050267451581}
   - component: {fileID: 237655363522807632}
   - component: {fileID: -4539579519753635663}
+  - component: {fileID: 6873010565775353047}
   m_Layer: 7
   m_Name: Barracks
   m_TagString: Selectable
@@ -223,3 +224,19 @@ MonoBehaviour:
   m_Area: 1
   m_IgnoreFromBuild: 0
   m_AffectedAgents: 00000000
+--- !u!114 &6873010565775353047
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 6966467134147173408}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: fcc7b953095491143a88f8071cf7262f, type: 3}
+  m_Name: 
+  m_EditorClassIdentifier: 
+  woodCost: 50
+  foodCost: 0
+  stoneCost: 10
+  goldCost: 5
